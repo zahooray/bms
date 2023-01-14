@@ -1,0 +1,7 @@
+-r base.in
+
+django-debug-toolbar==3.7.0
+django-silk==5.0.1
+ipdb==0.13.9
+ipython==8.5.0
+coverage==6.5.0

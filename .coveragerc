@@ -1,0 +1,3 @@
+[run]
+ source = .
+ omit = config/asgi.py, config/settings/dev.py, config/settings/prod.py, config/settings/stage.py, config/wsgi.py, config/settings/base.py, manage.py, project_name/accounts/management/commands/migrate_accounts_data.py, project_name/communications/management/commands/create_email_contents.py, project_name/core/management/commands/generate_data.py, project_name/core/management/commands/migrate_previous_data.py, project_name/users/management/commands/configure_broker_type.py, config/settings/s3.py, config/settings/custom_storages.py, project_name/users/managers.py, project_name/users/forms.py, project_name/core/env_utils.py,
