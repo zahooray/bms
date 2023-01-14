@@ -6,16 +6,17 @@ from django_extensions.db.models import TimeStampedModel
 
 
 class classproperty(property):
-    def __get__(self, owner_self, owner_cls):
+    def __get__(self, owner_self, owner_cls) -> models.Manager:
         return self.fget(owner_cls)
 
 
-class BaseModel(TimeStampedModel):
+class BaseModel(models.Model):
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(default=timezone.now)
+    modified = models.DateTimeField(auto_now=True)
 
     @classproperty
-    def active_objects(cls):
+    def active_objects(cls) -> models.Manager:
         return cls.objects.filter(is_active=True)
 
     class Meta:
