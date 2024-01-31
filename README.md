@@ -1,8 +1,5 @@
 # Project Boilerplate
 
-## Tasks Scheduled
-1. `project_name.stripe.tasks.charge_pay_as_go_memberships` => 1st of every month at 2 am
-
 ## Required Changes
 
 - `docker-compose.*.yml`: change `project` with actual project name.
@@ -13,20 +10,6 @@
 - `config/env/*/.postgres`: change `project` with actual project name.
 - `Makefile`: change `project` with actual project name.
 - `config/settings/constance.py`: change `project` with actual project name.
-- `README.md`: change `Cogent-Labs-Inc` and `project_name-webapp` in "Create Issues" URLs.
-- `tasks.yml`: change following in ansible-playbook
-  - `<host-group-name>`: specify host group name
-  - `<repo-url>`: specify repository URL
-  - `<branch-name>`: specify branch name
-  - `<project-dir>`: specify project directory/path to clone into
-  - `<make-target>`: specify target name for `make` command
-  - `<env-name>`: specify environment name
-
-## Create Issues
-
-- [create new-feature issue](https://github.com/Cogent-Labs-Inc/project_name-webapp/issues/new?template=new-feature.md)
-- [create enhancement issue](https://github.com/Cogent-Labs-Inc/project_name-webapp/issues/new?template=enhancement.md)
-- [create bug issue](https://github.com/Cogent-Labs-Inc/project_name-webapp/issues/new?template=bug.md)
 
 ## Commands
 
