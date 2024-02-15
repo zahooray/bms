@@ -58,8 +58,14 @@ replace \* with appropriate ENV. name
 
 ## Pre Commit Hook Activation
 
-Install pre-commit package `pip install pre-commit`
-Install pre-commit hook `pre-commit install`.
+1. Install pre-commit package `pip install pre-commit`
+2. Install pre-commit hook `pre-commit install`
+
+- To bypass "bandit" hook, use `# nosec` as comment on the line it gives error
+- To bypass "Detect secrets" hook, add `# pragma: allowlist secret` as comment on the line it gives error
+- Try to bypass hooks only via comments if necessary
+- To commit without running pre-commit `git commit -m "message" --no-verify` (avoid as much as possible)
+
 
 ## Enable SSL with Certbot
 

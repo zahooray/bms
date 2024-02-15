@@ -7,27 +7,27 @@ x-common: &common
   networks:
     - project_name
 
-x-django-build: &django-build
-  build:
-    context: .
-    dockerfile: ./Dockerfile.dev
 
 services:
   celery:
-    <<: *django-build
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
     container_name: project_name-cc01
     command: bash -c "celery -A project_name worker -l info"
     depends_on:
       - django
       - redis
     env_file:
-      - ./config/env/dev/.env
+      - .env
     volumes:
       - .:/code/
     <<: *common
 
   celery-beat:
-    <<: *django-build
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
     container_name: project_name-cb01
     command: bash -c "celery -A project_name worker -l info --beat --scheduler django_celery_beat.schedulers:DatabaseScheduler"
     depends_on:
@@ -37,16 +37,19 @@ services:
       - ./config/env/dev/.env
     volumes:
       - .:/code/
+      - project_name_media_volume:/code/media
     <<: *common
 
   django:
-    <<: *django-build
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
     container_name: project_name-dc01
     command: bash -c "python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     env_file:
-      - ./config/env/dev/.env
+      - .env
     volumes:
       - ./:/code
       - project_name_static_volume:/code/static
@@ -68,6 +71,8 @@ services:
       ]
     ports:
       - "5555:5555"
+    depends_on:
+      - celery
     <<: *common
 
   frontend:
@@ -88,7 +93,7 @@ services:
     image: postgres:13.3-alpine
     container_name: project_name-pc01
     env_file:
-      - ./config/env/dev/.env
+      - .env
     ports:
       - "5432:5432"
     volumes:

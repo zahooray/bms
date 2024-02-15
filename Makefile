@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 
-docker_compose := docker-compose -f
+docker_compose := docker compose -f
 cr_compose     := $(docker_compose) docker-compose.cr.yml
 dev_compose    := $(docker_compose) docker-compose.dev.yml
 stage_compose  := $(docker_compose) docker-compose.stage.yml

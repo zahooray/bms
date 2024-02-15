@@ -7,14 +7,12 @@ x-common: &common
   networks:
     - project_name
 
-x-django-build: &django-build
-  build:
-    context: .
-    dockerfile: ./Dockerfile.stage
 
 services:
   celery:
-    <<: *django-build
+    build:
+      context: .
+      dockerfile: ./Dockerfile.stage
     container_name: project_name-cc01
     restart: unless-stopped
     command: bash -c "celery -A project_name worker -l info"
@@ -22,13 +20,15 @@ services:
       - django
       - redis
     env_file:
-      - ./config/env/stage/.django
+      - .env
     volumes:
       - .:/code/
     <<: *common
 
   celery-beat:
-    <<: *django-build
+    build:
+      context: .
+      dockerfile: ./Dockerfile.stage
     container_name: project_name-cb01
     restart: unless-stopped
     command: bash -c "celery -A project_name worker -l info --beat --scheduler django_celery_beat.schedulers:DatabaseScheduler"
@@ -36,7 +36,7 @@ services:
       - django
       - redis
     env_file:
-      - ./config/env/stage/.django
+      - .env
     volumes:
       - .:/code/
     <<: *common
@@ -49,14 +49,16 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   django:
-    <<: *django-build
+    build:
+      context: .
+      dockerfile: ./Dockerfile.stage
     container_name: project_name-dc01
     restart: unless-stopped
     command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4
     ports:
       - "8000:8000"
     env_file:
-      - ./config/env/stage/.django
+      - .env
     volumes:
       - ./:/code
       - project_name_static_volume:/code/static
@@ -67,7 +69,9 @@ services:
     <<: *common
 
   flower:
-    <<: *django-build
+    build:
+      context: .
+      dockerfile: ./Dockerfile.stage
     container_name: project_name-fc01
     command: bash -c "celery -A project_name --broker=redis://${REDIS_URL}/0 flower --url_prefix=flower --basic_auth=${FLOWER_USERNAME}:${FLOWER_PASSWORD}"
     ports:
@@ -75,7 +79,7 @@ services:
     depends_on:
       - celery
     env_file:
-      - ./config/env/stage/.django
+      - .env
     volumes:
       - .:/code/
     <<: *common
@@ -107,7 +111,7 @@ services:
     container_name: project_name-pc01
     restart: unless-stopped
     env_file:
-      - ./config/env/stage/.postgres
+      - .env
     ports:
       - "5432:5432"
     volumes:

@@ -30,6 +30,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")  # noqa
 
 MEDIA_URL = "/django-media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")  # noqa
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
 SENDGRID_ECHO_TO_STDOUT = True
 SENDGRID_SANDBOX_MODE_IN_DEBUG = get_env_variable("SENDGRID_SANDBOX_MODE_IN_DEBUG") in ("True", "true", 1)
