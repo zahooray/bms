@@ -34,7 +34,7 @@ services:
       - django
       - redis
     env_file:
-      - ./config/env/dev/.env
+      - .env
     volumes:
       - .:/code/
       - project_name_media_volume:/code/media
@@ -75,19 +75,19 @@ services:
       - celery
     <<: *common
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: ./Dockerfile.dev
-    container_name: project_name-fe01
-    volumes:
-      - "./frontend:/app"
-      - "/app/node_modules"
-    ports:
-      - "3000:3000"
-    env_file:
-      - ./config/env/dev/.frontend
-    <<: *common
+#  frontend:
+#    build:
+#      context: ./frontend
+#      dockerfile: ./Dockerfile.dev
+#    container_name: project_name-fe01
+#    volumes:
+#      - "./frontend:/app"
+#      - "/app/node_modules"
+#    ports:
+#      - "3000:3000"
+#    env_file:
+#      - ./frontend/.env
+#    <<: *common
 
   postgres:
     image: postgres:13.3-alpine

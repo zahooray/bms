@@ -84,7 +84,6 @@ services:
       - .:/code/
     <<: *common
 
-
   nginx:
     build:
       context: .
