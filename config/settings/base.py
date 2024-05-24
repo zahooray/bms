@@ -43,7 +43,6 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rangefilter",
     "django_rest_passwordreset",
-    "ckeditor",
 ]
 
 CUSTOM_APPS = [

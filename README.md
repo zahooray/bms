@@ -2,14 +2,55 @@
 
 ## Required Changes
 
-- `docker-compose.*.yml`: change `project` with actual project name.
-- `project/`: change `project` with actual project name.
-- `project/celery.py`: change `project` with actual project name.
-- `config/settings/base.py`: change `project` with actual project name.
-- `config/env/*/.django`: change `project` with actual project name.
-- `config/env/*/.postgres`: change `project` with actual project name.
-- `Makefile`: change `project` with actual project name.
-- `config/settings/constance.py`: change `project` with actual project name.
+- `docker-compose.*.yml`: change `project_name` with actual project name.
+- `project/`: change `project_name` with actual project name.
+- `project/celery.py`: change `project_name` with actual project name.
+- `config/settings/base.py`: change `project_name` with actual project name.
+- `Makefile`: change `project_name` with actual project name.
+- `config/settings/constance.py`: change `project_name` with actual project name.
+- Search for `project_name` elsewhere in project and change with actual project name.
+
+### Pulling frontend submodule (If needed)
+- Delete existing frontend folder
+- Add a file called `.gitmodules` with contents below. (Link below is placeholder, use actual ssh code from repo)
+  ```
+   [submodule "frontend"]
+      path = frontend
+      url = git@github.com:organization_name/project_name.git
+  ```
+- Add frontend submodule `git submodule add git@github.com:organization_name/project_name.git frontend`
+
+
+## Project First Time Setup
+
+1. Pull in submodules `git submodule update --init --recursive` (you need access to frontend repo too)
+2. Ensure docker and docker compose are installed. [link](https://docs.docker.com/engine/install/)
+3. Ensure `make` is installed. You can do it with
+   ```shell script
+    sudo apt install make
+   ```
+4. Copy the .env.example to .env
+   ```shell
+    cp .env.example .env
+   ```
+5. Do step #4 in `frontend/` directory as well. Copy the `.env.example` to `.env`
+   ```shell
+    cp .env.example .env
+   ```
+6. Build and pull the docker images
+   ```shell
+    make dev.build
+   ```
+7. Up the docker containers
+   ```shell
+   make dev.up
+   ```
+8. The project should be running now on localhost (127.0.0.1) on ports 8000 and 3000.
+9. Navigate to http://localhost:8000 for backend, and http://localhost:3000 for frontend.
+10. (To stop the project or remove the containers, run)
+    ```shell
+    make dev.down
+    ```
 
 ## Commands
 
@@ -58,8 +99,14 @@ replace \* with appropriate ENV. name
 
 ## Pre Commit Hook Activation
 
-Install pre-commit package `pip install pre-commit`
-Install pre-commit hook `pre-commit install`.
+1. Install pre-commit package `pip install pre-commit`
+2. Install pre-commit hook `pre-commit install`
+
+- To bypass "bandit" hook, use `# nosec` as comment on the line it gives error
+- To bypass "Detect secrets" hook, add `# pragma: allowlist secret` as comment on the line it gives error
+- Try to bypass hooks only via comments if necessary
+- To commit without running pre-commit `git commit -m "message" --no-verify` (avoid as much as possible)
+
 
 ## Enable SSL with Certbot
 
