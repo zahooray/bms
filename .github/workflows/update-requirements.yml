@@ -1,0 +1,23 @@
+name: update-requirements
+
+on:
+  workflow_dispatch:
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run requirements script
+        run: make cr
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add /code/config/requirements/dev.txt /code/config/requirements/stage.txt /code/config/requirements/prod.txt
+          git commit -m "Update requirements files"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
