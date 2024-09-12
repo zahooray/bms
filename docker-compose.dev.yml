@@ -75,20 +75,6 @@ services:
       - celery
     <<: *common
 
-#  frontend:
-#    build:
-#      context: ./frontend
-#      dockerfile: ./Dockerfile.dev
-#    container_name: project_name-fe01
-#    volumes:
-#      - "./frontend:/app"
-#      - "/app/node_modules"
-#    ports:
-#      - "3000:3000"
-#    env_file:
-#      - ./frontend/.env
-#    <<: *common
-
   postgres:
     image: postgres:13.3-alpine
     container_name: project_name-pc01
