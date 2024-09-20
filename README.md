@@ -90,10 +90,9 @@ replace \* with appropriate ENV. name
 
 ### (stage|prod)
 
-- update `(stage|prod)-init-letsencrypt.sh`
-- update domains
+- update `DOMAINS` in .env file
 - by default following command will run in test mode
-  - `sudo ./(stage|prod)-init-letsencrypt.sh`
-- once confirmed update `staging=0` in `(stage|prod)-init-letsencrypt.sh` and then run
-  - `sudo ./(stage|stage)-init-letsencrypt.sh`
+  - `sudo ./init-letsencrypt.sh`
+- once confirmed update `staging=0` in `init-letsencrypt.sh` and then run
+  - `sudo ./init-letsencrypt.sh`
 - uncomment lines in `certbot` and `nginx` services in `docker-compose.(stage|prod).py`
