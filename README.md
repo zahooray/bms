@@ -35,13 +35,12 @@
    ```shell
    make dev.down
    ```
+9. (optional) Run this command to create a superuser
+   ```shell
+   docker compose -f docker-compose.dev.yml exec django python manage.py seed_superuser
+   ```
 
 ## Commands
-
-### To add a new package
-
-- put your package name & version in appropriate `config/requirements/*.in` file
-- run `make cr`
 
 ### To dumpdata and loaddata
 
@@ -72,7 +71,6 @@ replace \* with appropriate ENV. name
 
 ### Common Commands
 
-- `make cr` : compile requirements
 - `make *.attach` : attach to specified container
 
 ## Pre Commit Hook Activation

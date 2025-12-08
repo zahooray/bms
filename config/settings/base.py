@@ -46,6 +46,7 @@ THIRD_PARTY_APPS = [
 ]
 
 CUSTOM_APPS = [
+    "project_name.core",
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
