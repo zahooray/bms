@@ -1,10 +1,12 @@
-FROM python:3.11-buster
+# use buster for maximum efficiency
+FROM python:3.11-slim-buster
 
 ENV PYTHONUNBUFFERED 1
 
 RUN mkdir /code
 WORKDIR /code
 
-COPY config/requirements/stage.txt /code/
+COPY config/requirements/base.in /code/
+COPY config/requirements/stage.in /code/
 RUN pip install --upgrade pip
-RUN pip install -r /code/stage.txt
+RUN pip install -r /code/stage.in

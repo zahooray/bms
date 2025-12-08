@@ -4,6 +4,11 @@ x-common: &common
   restart: unless-stopped
   networks:
     - project_name
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "20m"
+      max-file: "3"
 
 services:
   celery:
@@ -20,6 +25,7 @@ services:
       - .env
     volumes:
       - .:/code/
+      - project_name_media_volume:/code/media
     <<: *common
 
   celery-beat:
@@ -36,6 +42,7 @@ services:
       - .env
     volumes:
       - .:/code/
+      - project_name_media_volume:/code/media
     <<: *common
 
   certbot:
@@ -44,6 +51,7 @@ services:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    <<: *common
 
   django:
     build:
@@ -64,21 +72,22 @@ services:
       - redis
     <<: *common
 
-  flower:
-    build:
-      context: .
-      dockerfile: ./Dockerfile.prod
-    container_name: project_name-fc01
-    command: bash -c "celery -A project_name --broker=redis://${REDIS_URL}/0 flower --url_prefix=flower --basic_auth=${FLOWER_USERNAME}:${FLOWER_PASSWORD}"
-    ports:
-      - "5555:5555"
-    depends_on:
-      - celery
-    env_file:
-      - .env
-    volumes:
-      - .:/code/
-    <<: *common
+#  flower:
+#    image: mher/flower:0.9.7
+#    container_name: project_name-fc01
+#    command: >
+#      flower
+#      --broker=redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_DB:-0}
+#      --broker_api=redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_DB:-0}
+#      --port=${FLOWER_PORT:-5555}
+#      --basic_auth=${FLOWER_USERNAME:-admin}:${FLOWER_PASSWORD:-admin}
+#    ports:
+#      - "${FLOWER_PORT:-5555}:5555"
+#    environment:
+#      - CELERY_BROKER_URL=redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_DB:-0}
+#    depends_on:
+#      - celery
+#    <<: *common
 
   nginx:
     build:
@@ -97,12 +106,12 @@ services:
       - ./data/certbot/www:/var/www/certbot
     depends_on:
       - django
-      - flower
+#      - flower
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
     <<: *common
 
   postgres:
-    image: postgres:13.3-alpine
+    image: postgres:18-alpine
     container_name: project_name-pc01
     env_file:
       - .env

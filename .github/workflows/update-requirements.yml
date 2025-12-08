@@ -16,7 +16,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add /code/config/requirements/dev.txt /code/config/requirements/stage.txt /code/config/requirements/prod.txt
+          git add /code/config/requirements/dev.in /code/config/requirements/stage.in /code/config/requirements/prod.in
           git commit -m "Update requirements files"
           git push
         env:
