@@ -204,6 +204,10 @@ SITE_ID = 1
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
+        # Phase 3: lets you browse the DRF API in a browser while logged
+        # into /admin/. Tokens do not exist until Phase 5, so without this
+        # every DRF endpoint would return 401.
+        "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",

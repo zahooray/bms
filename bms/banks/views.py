@@ -1,52 +1,86 @@
-"""Phase 2 - plain Django views. No DRF anywhere in this file.
+"""Phase 3, approach A: APIView. You write everything by hand.
 
-Everything here is done by hand on purpose. Phase 3 replaces most of it
-with a serializer, and the contrast is the lesson.
+APIView is DRF's most manual view class. It gives you exactly three things
+the plain Django View did not:
+
+  1. request is a DRF Request  -> request.data, request.query_params
+  2. authentication + permissions run before your method (stage 5b)
+  3. exceptions become proper JSON error responses (stage 5e)
+
+Everything else - which queryset, which serializer, pagination, filtering -
+is yours to write. Compare with bms/banks/generic_views.py on the
+phase3/generic branch, which declares the same endpoint in four lines.
 """
 
 from django.db.models import Count
-from django.http import JsonResponse
-from django.views import View
+from rest_framework import permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Bank
+from .serializers import BankSerializer
 
 
-class BankListView(View):
-    """GET /banks/ -> every bank with its branch count.
+class BankListAPIView(APIView):
+    """GET /api/banks/ and POST /api/banks/
 
-    Subclasses django.views.View, which does exactly one thing: it looks at
-    request.method and calls the matching method on this class.
-
-        GET  -> self.get()
-        POST -> self.post()   (not defined here, so POST returns 405)
-
-    No templates, no forms, no DRF. Just method routing.
+    Method routing happens in APIView.dispatch():
+        handler = getattr(self, request.method.lower(), http_method_not_allowed)
+    So defining get() and post() is all that "routing" means. A DELETE here
+    returns 405 without you writing anything.
     """
 
+    permission_classes = [permissions.AllowAny]
+
     def get(self, request):
-        # annotate() adds a computed column to EACH row. One SQL query with a
-        # GROUP BY - not a Python loop calling .count() per bank (which would
-        # be N+1).
-        #
-        # "branches" is the related_name on BankBranch.bank.
         banks = Bank.objects.annotate(branch_count=Count("branches")).order_by("name")
+        serializer = BankSerializer(banks, many=True)
+        
+        return Response(serializer.data)
 
-        # THE TEDIOUS PART. Model objects are not JSON, so every field is
-        # copied into a dict by hand. In Phase 3 this whole block becomes:
-        #     BankSerializer(banks, many=True).data
-        data = [
-            {
-                "id": bank.id,
-                "name": bank.name,
-                "is_islamic": bank.is_islamic,
-                # branch_count is NOT a model field. annotate() attached it
-                # to each instance for this query only.
-                "branch_count": bank.branch_count,
-            }
-            for bank in banks
-        ]
+    def post(self, request):
+       
+        serializer = BankSerializer(data=request.data)
 
-        # JsonResponse wants a dict. Passing a bare list needs safe=False.
-        # Wrapping in {"banks": [...]} also leaves room to add "count"/"next"
-        # later, which is exactly what DRF pagination does in Phase 6.
-        return JsonResponse({"count": len(data), "banks": data})
+       
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class BankDetailAPIView(APIView):
+    """GET / PATCH / DELETE /api/banks/<pk>/
+
+    Written out in full so you can see exactly how much
+    RetrieveUpdateDestroyAPIView does for you in Phase 4.
+    """
+
+    permission_classes = [permissions.AllowAny]
+
+    def get_object(self, pk):
+        """Fetch or 404.
+
+        get_object_or_404 raises Http404, which DRF's exception handler
+        converts into {"detail": "Not found."} with status 404. Using
+        Bank.objects.get() directly would raise DoesNotExist and produce a
+        500 instead.
+        """
+        from django.shortcuts import get_object_or_404
+
+        return get_object_or_404(
+            Bank.objects.annotate(branch_count=Count("branches")), pk=pk
+        )
+
+    def get(self, request, pk):
+        return Response(BankSerializer(self.get_object(pk)).data)
+
+    def patch(self, request, pk):
+        serializer = BankSerializer(self.get_object(pk), data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        self.get_object(pk).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -7,8 +7,7 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-
-
+import debug_toolbar
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -26,13 +25,12 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("login/", auth_views.LoginView.as_view(), name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
-    path("banks/", include("bms.banks.urls")),
-    path("accounts/", include("bms.accounts.urls")),
+    path("api/banks/", include("bms.banks.urls")),
+    path("api/accounts/", include("bms.accounts.urls")),
+    path("api-auth/", include("rest_framework.urls")),
 ]
 
 if settings.ENABLE_DEBUG_TOOLS:
-    import debug_toolbar
-
     urlpatterns += [
         path("__debug__/", include(debug_toolbar.urls)),
         path("silk/", include("silk.urls", namespace="silk")),
