@@ -3,7 +3,7 @@ x-common: &common
   tty: true
   restart: unless-stopped
   networks:
-    - project_name
+    - bms
   logging:
     driver: "json-file"
     options:
@@ -15,9 +15,9 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile.prod
-    container_name: project_name-cc01
+    container_name: bms-cc01
     restart: unless-stopped
-    command: bash -c "celery -A project_name worker -l info"
+    command: bash -c "celery -A bms worker -l info"
     depends_on:
       - django
       - redis
@@ -32,9 +32,9 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile.prod
-    container_name: project_name-cb01
+    container_name: bms-cb01
     restart: unless-stopped
-    command: bash -c "celery -A project_name worker -l info --beat --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    command: bash -c "celery -A bms worker -l info --beat --scheduler django_celery_beat.schedulers:DatabaseScheduler"
     depends_on:
       - django
       - redis
@@ -57,7 +57,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile.prod
-    container_name: project_name-dc01
+    container_name: bms-dc01
     restart: unless-stopped
     command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4
     ports:
@@ -74,7 +74,7 @@ services:
 
 #  flower:
 #    image: mher/flower:0.9.7
-#    container_name: project_name-fc01
+#    container_name: bms-fc01
 #    command: >
 #      flower
 #      --broker=redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_DB:-0}
@@ -93,7 +93,7 @@ services:
     build:
       context: .
       dockerfile: ./config/nginx/Dockerfile
-    container_name: project_name-nc01
+    container_name: bms-nc01
     restart: unless-stopped
     ports:
       - "80:80"
@@ -112,7 +112,7 @@ services:
 
   postgres:
     image: postgres:18-alpine
-    container_name: project_name-pc01
+    container_name: bms-pc01
     env_file:
       - .env
     ports:
@@ -123,14 +123,14 @@ services:
 
   redis:
     image: redis:6.2-buster
-    container_name: project_name-rc01
+    container_name: bms-rc01
     restart: unless-stopped
     volumes:
       - project_name_redis_data:/data
     <<: *common
 
 networks:
-  project_name:
+  bms:
     driver: bridge
 
 volumes:

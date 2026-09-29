@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="project_name API",
+        title="bms API",
         default_version="v1",
     ),
     public=True,

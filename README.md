@@ -2,13 +2,13 @@
 
 ## Required Changes
 
-- `docker-compose.*.yml`: change `project_name` with actual project name.
-- `project/`: change `project_name` with actual project name.
-- `project/celery.py`: change `project_name` with actual project name.
-- `config/settings/base.py`: change `project_name` with actual project name.
-- `Makefile`: change `project_name` with actual project name.
-- `config/settings/constance.py`: change `project_name` with actual project name.
-- Search for `project_name` elsewhere in project and change with actual project name.
+- `docker-compose.*.yml`: change `bms` with actual project name.
+- `project/`: change `bms` with actual project name.
+- `project/celery.py`: change `bms` with actual project name.
+- `config/settings/base.py`: change `bms` with actual project name.
+- `Makefile`: change `bms` with actual project name.
+- `config/settings/constance.py`: change `bms` with actual project name.
+- Search for `bms` elsewhere in project and change with actual project name.
 
 ## Project First Time Setup
 

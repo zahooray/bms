@@ -1,4 +1,4 @@
-from project_name.core.env_utils import get_env_variable
+from bms.core.env_utils import get_env_variable
 
 
 AWS_ACCESS_KEY_ID = get_env_variable("AWS_ACCESS_KEY_ID")
