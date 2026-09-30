@@ -1,0 +1,11 @@
+$kind: http-request
+description: Requires login. get_queryset() filters to request.user, so you only ever see your own accounts.
+url: "{{base_url}}/api/accounts/"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('200', () => pm.response.to.have.status(200));
+      const r = pm.response.json().results;
+      if (r.length) pm.collectionVariables.set('account_id', r[0].id);
+order: 1000

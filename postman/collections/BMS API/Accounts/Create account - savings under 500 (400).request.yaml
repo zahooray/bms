@@ -1,0 +1,17 @@
+$kind: http-request
+description: "Cross-field rule in validate(): needs both account_type and balance, so neither field's own validator could express it."
+url: "{{base_url}}/api/accounts/"
+method: POST
+headers:
+  Content-Type: application/json
+  X-CSRFToken: "{{csrftoken}}"
+body:
+  type: text
+  content: |-
+    {
+      "account_number": "PK0000000043",
+      "bank_branch": {{branch_id}},
+      "account_type": "savings",
+      "balance": "100.00"
+    }
+order: 4000

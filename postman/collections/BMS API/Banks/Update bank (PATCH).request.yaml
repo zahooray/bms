@@ -1,0 +1,14 @@
+$kind: http-request
+description: PATCH is partial - omitted fields keep their values. PUT on the same URL requires every required field.
+url: "{{base_url}}/api/banks/{{bank_id}}/"
+method: PATCH
+headers:
+  Content-Type: application/json
+  X-CSRFToken: "{{csrftoken}}"
+body:
+  type: text
+  content: |-
+    {
+      "name": "Al Baraka Bank Limited"
+    }
+order: 6000

@@ -1,0 +1,5 @@
+$kind: http-request
+description: Another user's id returns 404, not 403 - the row is simply absent from get_queryset(). A 403 would confirm it exists.
+url: "{{base_url}}/api/accounts/{{account_id}}/"
+method: GET
+order: 5000

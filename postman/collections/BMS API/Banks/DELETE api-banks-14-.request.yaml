@@ -1,0 +1,18 @@
+$kind: http-request
+name: DELETE api/banks/14/
+description: ""
+url: " http://localhost:8000/api/banks/14/"
+method: DELETE
+headers:
+  Content-Type: application/json
+  X-CSRFToken: AnlFNi9bfCakPFgYNaJ7in6ulLyEA7g3
+body:
+  type: json
+  content: |-
+    {
+      "name": "Al Baraka Bank",
+      "swift_code": "aiinpkka",
+      "is_islamic": true,
+      "established_date": "1991-06-12"
+    }
+order: 4499211333410204

@@ -1,0 +1,21 @@
+$kind: collection
+description: |-
+  Bank Management System - Phase 4.
+
+  Session authentication (Phase 5 replaces this with tokens).
+
+  HOW TO RUN:
+  1. Set the `base_url` collection variable if your server is not on localhost:8000.
+  2. Run `Auth / 1. Get CSRF cookie` - stores the csrftoken.
+  3. Run `Auth / 2. Login` - stores sessionid; every later request reuses it.
+  4. Everything else can then be run in any order.
+
+  The collection captures `bank_id` and `account_id` from the create requests, so the detail requests work without editing URLs.
+variables:
+  base_url: http://localhost:8000
+  username: admin
+  password: admin123
+  csrftoken: ""
+  bank_id: ""
+  branch_id: ""
+  account_id: ""

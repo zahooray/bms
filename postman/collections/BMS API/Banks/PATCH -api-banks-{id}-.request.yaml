@@ -1,0 +1,15 @@
+$kind: http-request
+name: PATCH /api/banks/{id}/
+description: ""
+url: " http://localhost:8000/api/banks/13/"
+method: PATCH
+headers:
+  Content-Type: application/json
+  X-CSRFToken: AnlFNi9bfCakPFgYNaJ7in6ulLyEA7g3
+body:
+  type: json
+  content: |-
+    {
+      "swift_code": "SC089009"
+    }
+order: 4490550442729406

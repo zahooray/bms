@@ -1,0 +1,7 @@
+$kind: http-request
+description: 204 when the bank has no accounts under it. 400 with a message when a branch still holds accounts - perform_destroy() checks first, because Bank CASCADEs to BankBranch which is PROTECTed by BankAccount.
+url: "{{base_url}}/api/banks/{{bank_id}}/"
+method: DELETE
+headers:
+  X-CSRFToken: "{{csrftoken}}"
+order: 7000

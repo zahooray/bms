@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{base_url}}/api/accounts/{{account_id}}/"
+method: DELETE
+headers:
+  X-CSRFToken: "{{csrftoken}}"
+order: 7000
