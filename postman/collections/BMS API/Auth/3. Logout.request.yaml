@@ -1,7 +1,0 @@
-$kind: http-request
-description: POST only. Django 5 returns 405 for GET.
-url: "{{base_url}}/api/users/logout/"
-method: POST
-headers:
-  X-CSRFToken: "{{csrftoken}}"
-order: 3000

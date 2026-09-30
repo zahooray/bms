@@ -1,6 +1,0 @@
-$kind: http-request
-name: GET /api/banks/{id}
-description: ""
-url: " http://localhost:8000/api/banks/13"
-method: GET
-order: 4448867907735070

@@ -1,5 +1,0 @@
-$kind: http-request
-description: Run this after Logout. Returns 401 JSON, not a redirect to an HTML login page.
-url: "{{base_url}}/api/accounts/"
-method: GET
-order: 2000
