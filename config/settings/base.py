@@ -54,14 +54,9 @@ CUSTOM_APPS = [
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 AUTH_USER_MODEL = "users.User"
-
-# --- Phase 2: auth redirects ------------------------------------------------
-# Where @login_required / LoginRequiredMixin send anonymous users.
-# The default is "/accounts/login/", which COLLIDES with the accounts app,
-# so it is set explicitly.
-LOGIN_URL = "login"
-LOGIN_REDIRECT_URL = "/banks/"
-LOGOUT_REDIRECT_URL = "login"
+LOGIN_URL = "users:login"
+LOGIN_REDIRECT_URL = "/api/banks/"
+LOGOUT_REDIRECT_URL = "users:login"
 
 
 MIDDLEWARE = [

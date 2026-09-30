@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
 from django.urls import include, path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
@@ -23,8 +22,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="swagger"),
     path("admin/", admin.site.urls),
-    path("login/", auth_views.LoginView.as_view(), name="login"),
-    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path("api/users/", include("bms.users.urls")),
     path("api/banks/", include("bms.banks.urls")),
     path("api/accounts/", include("bms.accounts.urls")),
     path("api-auth/", include("rest_framework.urls")),
