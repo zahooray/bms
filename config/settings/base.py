@@ -45,12 +45,7 @@ THIRD_PARTY_APPS = [
     "django_rest_passwordreset",
 ]
 
-CUSTOM_APPS = [
-    "bms.core",
-    "bms.users",
-    "bms.accounts",
-    "bms.banks"
-]
+CUSTOM_APPS = ["bms.core", "bms.users", "bms.accounts", "bms.banks"]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 AUTH_USER_MODEL = "users.User"
@@ -258,7 +253,9 @@ LOGGING = {
 }
 
 SWAGGER_SETTINGS = {
-    "SECURITY_DEFINITIONS": {"api_key": {"type": "apiKey", "in": "header", "name": "Authorization"}},
+    "SECURITY_DEFINITIONS": {
+        "api_key": {"type": "apiKey", "in": "header", "name": "Authorization"}
+    },
 }
 
 

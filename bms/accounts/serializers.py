@@ -7,16 +7,13 @@ from .models import BankAccount
 
 class BankAccountSerializer(serializers.ModelSerializer):
     """A bank account, with bank/branch/owner names pulled in via `source`."""
+
     bank_name = serializers.CharField(source="bank_branch.bank.name", read_only=True)
-    bank_is_islamic = serializers.BooleanField(
-        source="bank_branch.bank.is_islamic", read_only=True
-    )
-    
+    bank_is_islamic = serializers.BooleanField(source="bank_branch.bank.is_islamic", read_only=True)
+
     branch_name = serializers.CharField(source="bank_branch.name", read_only=True)
     owner = serializers.CharField(source="user.username", read_only=True)
-    account_type_label = serializers.CharField(
-        source="get_account_type_display", read_only=True
-    )
+    account_type_label = serializers.CharField(source="get_account_type_display", read_only=True)
 
     class Meta:
         model = BankAccount
@@ -34,7 +31,7 @@ class BankAccountSerializer(serializers.ModelSerializer):
             "is_active",
             "created",
         ]
-        
+
         read_only_fields = ["id", "is_active", "created"]
 
     def validate_balance(self, value):

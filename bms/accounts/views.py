@@ -6,7 +6,6 @@ from .serializers import BankAccountSerializer
 
 
 class AccountScopedQuerysetMixin:
-
     def get_queryset(self):
         return (
             BankAccount.objects.filter(user=self.request.user)
@@ -16,7 +15,7 @@ class AccountScopedQuerysetMixin:
 
 
 class AccountListView(AccountScopedQuerysetMixin, ListCreateAPIView):
-    
+
     serializer_class = BankAccountSerializer
     permission_classes = [permissions.IsAuthenticated]
 

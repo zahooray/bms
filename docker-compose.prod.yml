@@ -72,22 +72,22 @@ services:
       - redis
     <<: *common
 
-#  flower:
-#    image: mher/flower:0.9.7
-#    container_name: bms-fc01
-#    command: >
-#      flower
-#      --broker=redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_DB:-0}
-#      --broker_api=redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_DB:-0}
-#      --port=${FLOWER_PORT:-5555}
-#      --basic_auth=${FLOWER_USERNAME:-admin}:${FLOWER_PASSWORD:-admin}
-#    ports:
-#      - "${FLOWER_PORT:-5555}:5555"
-#    environment:
-#      - CELERY_BROKER_URL=redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_DB:-0}
-#    depends_on:
-#      - celery
-#    <<: *common
+  #  flower:
+  #    image: mher/flower:0.9.7
+  #    container_name: bms-fc01
+  #    command: >
+  #      flower
+  #      --broker=redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_DB:-0}
+  #      --broker_api=redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_DB:-0}
+  #      --port=${FLOWER_PORT:-5555}
+  #      --basic_auth=${FLOWER_USERNAME:-admin}:${FLOWER_PASSWORD:-admin}
+  #    ports:
+  #      - "${FLOWER_PORT:-5555}:5555"
+  #    environment:
+  #      - CELERY_BROKER_URL=redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_DB:-0}
+  #    depends_on:
+  #      - celery
+  #    <<: *common
 
   nginx:
     build:
@@ -106,7 +106,7 @@ services:
       - ./data/certbot/www:/var/www/certbot
     depends_on:
       - django
-#      - flower
+    #      - flower
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
     <<: *common
 

@@ -31,7 +31,7 @@ class BankDetailView(RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.AllowAny]
 
     def perform_destroy(self, instance):
-        
+
         if instance.branches.filter(accounts__isnull=False).exists():
             raise ValidationError(
                 {"detail": "Cannot delete a bank whose branches still hold accounts."}

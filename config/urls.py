@@ -1,3 +1,5 @@
+import debug_toolbar
+
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -6,7 +8,7 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-import debug_toolbar
+
 
 schema_view = get_schema_view(
     openapi.Info(

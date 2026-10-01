@@ -83,7 +83,6 @@ replace \* with appropriate ENV. name
 - Try to bypass hooks only via comments if necessary
 - To commit without running pre-commit `git commit -m "message" --no-verify` (avoid as much as possible)
 
-
 ## Enable SSL with Certbot
 
 ### (stage|prod)
