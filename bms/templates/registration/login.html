@@ -1,0 +1,34 @@
+{# Django's LoginView renders this on GET and re-renders it with errors on a failed POST. #}
+<!doctype html>
+<meta charset="utf-8">
+<title>BMS - Log in</title>
+
+<h2>Log in</h2>
+
+{# form.errors holds non-field errors, e.g. "wrong username or password" #}
+{% if form.errors %}
+  <p style="color:#c00">Invalid username or password.</p>
+{% endif %}
+
+<form method="post">
+  {# REQUIRED. CsrfViewMiddleware rejects the POST without this hidden input. #}
+  {% csrf_token %}
+
+  {# AuthenticationForm - renders username + password inputs #}
+  {{ form.as_p }}
+
+  {# LoginView reads ?next=... and redirects there after a successful login.     #}
+  {# @login_required is what puts ?next= in the URL in the first place.          #}
+  <input type="hidden" name="next" value="{{ next }}">
+
+  <button type="submit">Log in</button>
+</form>
+
+{% if user.is_authenticated %}
+  <p>Signed in as <strong>{{ user.username }}</strong></p>
+  {# Django 5: LogoutView is POST-only. A plain <a href> gives 405. #}
+  <form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Log out</button>
+  </form>
+{% endif %}
