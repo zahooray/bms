@@ -1,31 +1,39 @@
-from django.db import models
+from django.db.models import (
+    CASCADE,
+    BooleanField,
+    CharField,
+    DateField,
+    ForeignKey,
+    TextField,
+    UniqueConstraint,
+)
 
 from bms.core.models import BaseModel
 
 
 class Bank(BaseModel):
-    name = models.CharField(max_length=255, blank=True, null=True)
-    swift_code = models.CharField(max_length=11, unique=True)
-    is_islamic = models.BooleanField(default=False)
-    established_date = models.DateField()
+    name = CharField(max_length=255, blank=True, null=True)
+    swift_code = CharField(max_length=11, unique=True)
+    is_islamic = BooleanField(default=False)
+    established_date = DateField()
 
     def __str__(self):
         return f"{self.name} ({self.swift_code})"
 
 
 class BankBranch(BaseModel):
-    bank = models.ForeignKey(
+    bank = ForeignKey(
         Bank,
-        on_delete=models.CASCADE,
+        on_delete=CASCADE,
         related_name="branches",
     )
-    name = models.CharField(max_length=255, null=True, blank=True)
-    branch_code = models.CharField(max_length=255, null=True, blank=True)
-    address = models.TextField()
+    name = CharField(max_length=255, null=True, blank=True)
+    branch_code = CharField(max_length=255, null=True, blank=True)
+    address = TextField()
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(
+            UniqueConstraint(
                 fields=["bank", "branch_code"],
                 name="unique_branch_code_per_bank",
             )

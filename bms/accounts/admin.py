@@ -1,10 +1,10 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 
-from .models import BankAccount
+from bms.accounts.models import BankAccount
 
 
-@admin.register(BankAccount)
-class BankAccountAdmin(admin.ModelAdmin):
+@register(BankAccount)
+class BankAccountAdmin(ModelAdmin):
     list_display = (
         "account_number",
         "user",

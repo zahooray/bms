@@ -1,11 +1,31 @@
-from django.utils import timezone
-from rest_framework import serializers
+from django.utils.timezone import localdate
+from rest_framework.serializers import IntegerField, ModelSerializer, ValidationError
+from rest_framework.validators import UniqueValidator
 
-from .models import Bank, BankBranch
+from bms.banks.models import Bank, BankBranch
+from bms.core.serializer_fields import UpperCaseCharField
 
 
-class BankSerializer(serializers.ModelSerializer):
-    branch_count = serializers.IntegerField(read_only=True)
+class BankNestedSerializer(ModelSerializer):
+    class Meta:
+        model = Bank
+        fields = ["id", "name", "swift_code", "is_islamic"]
+
+
+class BankBranchNestedSerializer(ModelSerializer):
+    bank = BankNestedSerializer(read_only=True)
+
+    class Meta:
+        model = BankBranch
+        fields = ["id", "name", "branch_code", "bank"]
+
+
+class BankSerializer(ModelSerializer):
+    branch_count = IntegerField(read_only=True)
+    swift_code = UpperCaseCharField(
+        max_length=11,
+        validators=[UniqueValidator(queryset=Bank.objects.all())],
+    )
 
     class Meta:
         model = Bank
@@ -20,41 +40,27 @@ class BankSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["id", "is_active"]
 
-    def to_internal_value(self, data):
-
-        if isinstance(data, dict) and data.get("swift_code"):
-            data = data.copy()
-            data["swift_code"] = data["swift_code"].strip().upper()
-        return super().to_internal_value(data)
-
     def validate_swift_code(self, value):
         if len(value) not in (8, 11):
-            raise serializers.ValidationError("SWIFT/BIC must be 8 or 11 characters.")
+            raise ValidationError("SWIFT/BIC must be 8 or 11 characters.")
         return value
 
     def validate(self, attrs):
         established = attrs.get("established_date")
-        if established:
-            if established > timezone.localdate():
-                raise serializers.ValidationError(
-                    {"established_date": "Established date cannot be in the future."}
-                )
+        if established and established > localdate():
+            raise ValidationError({"established_date": "Established date cannot be in the future."})
         return attrs
 
 
-class BankBranchSerializer(serializers.ModelSerializer):
-    """Branch, with a couple of fields reached through the FK via `source`."""
-
-    bank_name = serializers.CharField(source="bank.name", read_only=True)
-    bank_is_islamic = serializers.BooleanField(source="bank.is_islamic", read_only=True)
+class BankBranchSerializer(ModelSerializer):
+    bank_detail = BankNestedSerializer(source="bank", read_only=True)
 
     class Meta:
         model = BankBranch
         fields = [
             "id",
             "bank",
-            "bank_name",
-            "bank_is_islamic",
+            "bank_detail",
             "name",
             "branch_code",
             "address",

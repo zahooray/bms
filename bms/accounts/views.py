@@ -1,8 +1,8 @@
-from rest_framework import permissions
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import IsAuthenticated
 
-from .models import BankAccount
-from .serializers import BankAccountSerializer
+from bms.accounts.models import BankAccount
+from bms.accounts.serializers import BankAccountSerializer
 
 
 class AccountScopedQuerysetMixin:
@@ -15,15 +15,13 @@ class AccountScopedQuerysetMixin:
 
 
 class AccountListView(AccountScopedQuerysetMixin, ListCreateAPIView):
-
     serializer_class = BankAccountSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
 
 class AccountDetailView(AccountScopedQuerysetMixin, RetrieveUpdateDestroyAPIView):
-
     serializer_class = BankAccountSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]

@@ -1,11 +1,11 @@
 from django.urls import path
 
-from . import views
+from bms.accounts.views import AccountDetailView, AccountListView
 
 
 app_name = "accounts"
 
 urlpatterns = [
-    path("", views.AccountListView.as_view(), name="list"),
-    path("<int:pk>/", views.AccountDetailView.as_view(), name="detail"),
+    path("", AccountListView.as_view(), name="list"),
+    path("<int:pk>/", AccountDetailView.as_view(), name="detail"),
 ]

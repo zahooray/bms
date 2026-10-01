@@ -1,10 +1,10 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 
-from .models import Bank, BankBranch
+from bms.banks.models import Bank, BankBranch
 
 
-@admin.register(Bank)
-class BankAdmin(admin.ModelAdmin):
+@register(Bank)
+class BankAdmin(ModelAdmin):
     list_display = ("name", "swift_code", "is_islamic", "established_date", "is_active")
     list_filter = ("is_islamic", "is_active", "established_date")
     search_fields = ("name", "swift_code")
@@ -12,8 +12,8 @@ class BankAdmin(admin.ModelAdmin):
     readonly_fields = ("created", "modified")
 
 
-@admin.register(BankBranch)
-class BankBranchAdmin(admin.ModelAdmin):
+@register(BankBranch)
+class BankBranchAdmin(ModelAdmin):
     list_display = ("name", "branch_code", "bank", "is_active")
     list_filter = ("bank", "is_active")
     search_fields = ("name", "branch_code", "bank__name")

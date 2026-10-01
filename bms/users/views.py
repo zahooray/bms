@@ -1,10 +1,11 @@
-from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import LoginView as DjangoLoginView
+from django.contrib.auth.views import LogoutView as DjangoLogoutView
 from django.urls import reverse_lazy
 
 
-class LoginView(auth_views.LoginView):
+class LoginView(DjangoLoginView):
     redirect_authenticated_user = True
 
 
-class LogoutView(auth_views.LogoutView):
+class LogoutView(DjangoLogoutView):
     next_page = reverse_lazy("users:login")
