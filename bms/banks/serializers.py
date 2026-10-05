@@ -50,20 +50,3 @@ class BankSerializer(ModelSerializer):
         if established and established > localdate():
             raise ValidationError({"established_date": "Established date cannot be in the future."})
         return attrs
-
-
-class BankBranchSerializer(ModelSerializer):
-    bank_detail = BankNestedSerializer(source="bank", read_only=True)
-
-    class Meta:
-        model = BankBranch
-        fields = [
-            "id",
-            "bank",
-            "bank_detail",
-            "name",
-            "branch_code",
-            "address",
-            "is_active",
-        ]
-        read_only_fields = ["id", "is_active"]

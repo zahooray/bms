@@ -22,14 +22,15 @@ class Bank(BaseModel):
 
 
 class BankBranch(BaseModel):
+    name = CharField(max_length=255, null=True, blank=True)
+    branch_code = CharField(max_length=255, null=True, blank=True)
+    address = TextField()
+
     bank = ForeignKey(
         Bank,
         on_delete=CASCADE,
         related_name="branches",
     )
-    name = CharField(max_length=255, null=True, blank=True)
-    branch_code = CharField(max_length=255, null=True, blank=True)
-    address = TextField()
 
     class Meta:
         constraints = [

@@ -49,9 +49,6 @@ CUSTOM_APPS = ["bms.core", "bms.users", "bms.accounts", "bms.banks"]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 AUTH_USER_MODEL = "users.User"
-LOGIN_URL = "users:login"
-LOGIN_REDIRECT_URL = "/api/banks/"
-LOGOUT_REDIRECT_URL = "users:login"
 
 
 MIDDLEWARE = [

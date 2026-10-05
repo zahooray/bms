@@ -6,6 +6,14 @@ from bms.core.models import BaseModel
 
 
 class BankAccount(BaseModel):
+    account_number = CharField(max_length=34, unique=True)
+    account_type = CharField(
+        max_length=20,
+        choices=AccountType.choices,
+        default=AccountType.SAVINGS,
+    )
+    balance = DecimalField(max_digits=12, decimal_places=2, default=0)
+
     user = ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=CASCADE,
@@ -16,13 +24,6 @@ class BankAccount(BaseModel):
         on_delete=PROTECT,
         related_name="accounts",
     )
-    account_number = CharField(max_length=34, unique=True)
-    account_type = CharField(
-        max_length=20,
-        choices=AccountType.choices,
-        default=AccountType.SAVINGS,
-    )
-    balance = DecimalField(max_digits=12, decimal_places=2, default=0)
 
     def __str__(self):
         return f"{self.account_number} ({self.user.username})"
