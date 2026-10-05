@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.db.models import CASCADE, PROTECT, CharField, DecimalField, ForeignKey
+from django.db.models import CASCADE, CharField, DecimalField, ForeignKey
 
 from bms.accounts.constants import AccountType
 from bms.core.models import BaseModel
@@ -21,7 +21,7 @@ class BankAccount(BaseModel):
     )
     bank_branch = ForeignKey(
         "banks.BankBranch",
-        on_delete=PROTECT,
+        on_delete=CASCADE,
         related_name="accounts",
     )
 

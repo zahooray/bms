@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
                 (
                     "bank_branch",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.PROTECT,
+                        on_delete=django.db.models.deletion.CASCADE,
                         related_name="accounts",
                         to="banks.bankbranch",
                     ),
