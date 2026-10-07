@@ -5,40 +5,42 @@ from django.db.models import (
     DateField,
     ForeignKey,
     TextField,
-    UniqueConstraint,
 )
 
 from bms.core.models import BaseModel
 
 
 class Bank(BaseModel):
-    name = CharField(max_length=255, blank=True, null=True)
-    swift_code = CharField(max_length=11, unique=True)
-    is_islamic = BooleanField(default=False)
-    established_date = DateField()
+  name = CharField(max_length=255, blank=True, null=True)
+  swift_code = CharField(max_length=11, unique=True)
+  is_islamic = BooleanField(default=False)
+  established_date = DateField()
+  
+  class Meta:
+    verbose_name = "bank"
+    verbose_name_plural = "banks"
+    db_table = "banks"
+    unique_together = ["bank", "branch_code"]
+  
+  def __str__(self):
+    return f"{self.name} ({self.swift_code})"
 
-    def __str__(self):
-        return f"{self.name} ({self.swift_code})"
 
-
-class BankBranch(BaseModel):
-    name = CharField(max_length=255, null=True, blank=True)
-    branch_code = CharField(max_length=255, null=True, blank=True)
-    address = TextField()
-
-    bank = ForeignKey(
-        Bank,
-        on_delete=CASCADE,
-        related_name="branches",
-    )
-
-    class Meta:
-        constraints = [
-            UniqueConstraint(
-                fields=["bank", "branch_code"],
-                name="unique_branch_code_per_bank",
-            )
-        ]
-
-    def __str__(self):
-        return f"{self.bank.name} - {self.name}"
+class Branch(BaseModel):
+  name = CharField(max_length=255, null=True, blank=True)
+  branch_code = CharField(max_length=255, null=True, blank=True)
+  address = TextField()
+  
+  bank = ForeignKey(
+    'banks.Bank',
+    on_delete=CASCADE,
+    related_name="branches",
+  )
+  
+  class Meta:
+    verbose_name = "branch"
+    verbose_name_plural = "branches"
+    db_table = "branches"
+  
+  def __str__(self):
+    return f"{self.bank.name} - {self.name}"

@@ -1,4 +1,5 @@
-from django.contrib.auth import login, logout
+from django.contrib.auth import authenticate, login, logout
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
@@ -7,18 +8,23 @@ from rest_framework.views import APIView
 from bms.users.serializers import LoginSerializer
 
 
-class LoginView(APIView):
+class UserLoginAPIView(APIView):
     permission_classes = [AllowAny]
     serializer_class = LoginSerializer
 
     def post(self, request):
-        serializer = self.serializer_class(data=request.data, context={"request": request})
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        login(request, serializer.validated_data["user"])
+
+        user = authenticate(request, **serializer.validated_data)
+        if not user:
+            raise ValidationError("Invalid username or password.")
+
+        login(request, user)
         return Response(status=HTTP_204_NO_CONTENT)
 
 
-class LogoutView(APIView):
+class UserLogoutAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):

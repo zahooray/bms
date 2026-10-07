@@ -1,17 +1,21 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 
-from bms.accounts.models import BankAccount
-from bms.accounts.serializers import BankAccountSerializer
+from bms.accounts.models import Account
+from bms.accounts.serializers import AccountCreateUpdateSerializer, AccountSerializer
 
 
-class AccountListView(ListCreateAPIView):
-    serializer_class = BankAccountSerializer
+class AccountListCreateAPIView(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method in ("POST", "PUT", "PATCH"):
+            return AccountCreateUpdateSerializer
+        return AccountSerializer
 
     def get_queryset(self):
         return (
-            BankAccount.objects.filter(user=self.request.user)
+            Account.objects.filter(user=self.request.user)
             .select_related("user", "bank_branch", "bank_branch__bank")
             .order_by("-created")
         )
@@ -20,11 +24,15 @@ class AccountListView(ListCreateAPIView):
         serializer.save(user=self.request.user)
 
 
-class AccountDetailView(RetrieveUpdateDestroyAPIView):
-    serializer_class = BankAccountSerializer
+class AccountRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
 
+    def get_serializer_class(self):
+        if self.request.method in ("POST", "PUT", "PATCH"):
+            return AccountCreateUpdateSerializer
+        return AccountSerializer
+
     def get_queryset(self):
-        return BankAccount.objects.filter(user=self.request.user).select_related(
+        return Account.objects.filter(user=self.request.user).select_related(
             "user", "bank_branch", "bank_branch__bank"
         )

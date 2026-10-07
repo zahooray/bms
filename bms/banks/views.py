@@ -7,13 +7,13 @@ from bms.banks.models import Bank
 from bms.banks.serializers import BankSerializer
 
 
-class BankListView(ListCreateAPIView):
+class BankListCreateAPIView(ListCreateAPIView):
     queryset = Bank.objects.annotate(branch_count=Count("branches")).order_by("name")
     serializer_class = BankSerializer
     permission_classes = [AllowAny]
 
 
-class BankDetailView(RetrieveUpdateDestroyAPIView):
+class BankRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Bank.objects.annotate(branch_count=Count("branches"))
     serializer_class = BankSerializer
     permission_classes = [AllowAny]
