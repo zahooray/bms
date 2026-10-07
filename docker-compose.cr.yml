@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile.cr
-    container_name: project_name-cr01
+    container_name: bms-cr01
     command: bash -c "/code/scripts/cr.sh"
     volumes:
       - ./:/code
