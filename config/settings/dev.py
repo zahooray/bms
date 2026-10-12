@@ -1,7 +1,5 @@
 import os
 
-from bms.core.env_utils import get_env_variable
-
 from .base import *  # noqa
 
 
