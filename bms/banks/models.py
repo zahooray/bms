@@ -20,7 +20,6 @@ class Bank(BaseModel):
     verbose_name = "bank"
     verbose_name_plural = "banks"
     db_table = "banks"
-    unique_together = ["bank", "branch_code"]
   
   def __str__(self):
     return f"{self.name} ({self.swift_code})"
@@ -41,6 +40,7 @@ class Branch(BaseModel):
     verbose_name = "branch"
     verbose_name_plural = "branches"
     db_table = "branches"
+    unique_together = ["bank", "branch_code"]
   
   def __str__(self):
     return f"{self.bank.name} - {self.name}"
