@@ -2,6 +2,7 @@
 
 import django.db.models.deletion
 import django.utils.timezone
+from django.conf import settings
 from django.db import migrations, models
 
 
@@ -11,6 +12,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("banks", "0001_initial"),
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -36,6 +38,14 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("balance", models.DecimalField(decimal_places=2, default=0, max_digits=12)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="accounts",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
                 (
                     "bank_branch",
                     models.ForeignKey(
