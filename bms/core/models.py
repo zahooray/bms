@@ -2,7 +2,6 @@ from django.db import models
 from django.db.models import Transform
 from django.db.models.fields import Field
 from django.utils import timezone
-from django_extensions.db.models import TimeStampedModel
 
 
 class classproperty(property):

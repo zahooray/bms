@@ -6,7 +6,7 @@ from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
 
-from project_name.core.env_utils import get_env_variable
+from bms.core.env_utils import get_env_variable
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,11 +45,10 @@ THIRD_PARTY_APPS = [
     "django_rest_passwordreset",
 ]
 
-CUSTOM_APPS = [
-    "project_name.core",
-]
+CUSTOM_APPS = ["bms.core", "bms.users", "bms.accounts", "bms.banks"]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
+AUTH_USER_MODEL = "users.User"
 
 
 MIDDLEWARE = [
@@ -69,7 +68,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "project_name/templates"],
+        "DIRS": [BASE_DIR / "bms/templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -163,7 +162,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 CONSTANCE_BACKEND = "constance.backends.redisd.RedisBackend"
 CONSTANCE_REDIS_CONNECTION = f"{REDIS_HOST}://{REDIS_HOST}:{REDIS_PORT}/0"
-CONSTANCE_REDIS_PREFIX = "constance:project_name:"
+CONSTANCE_REDIS_PREFIX = "constance:bms:"
 
 from .constance import *  # noqa
 
@@ -192,6 +191,10 @@ SITE_ID = 1
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
+        # Phase 3: lets you browse the DRF API in a browser while logged
+        # into /admin/. Tokens do not exist until Phase 5, so without this
+        # every DRF endpoint would return 401.
+        "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
@@ -239,7 +242,7 @@ LOGGING = {
             "handlers": ["console", "file"],
             "level": "INFO",
         },
-        "project_name": {
+        "bms": {
             "handlers": ["console", "file"],
             "level": "INFO",
         },
@@ -247,7 +250,9 @@ LOGGING = {
 }
 
 SWAGGER_SETTINGS = {
-    "SECURITY_DEFINITIONS": {"api_key": {"type": "apiKey", "in": "header", "name": "Authorization"}},
+    "SECURITY_DEFINITIONS": {
+        "api_key": {"type": "apiKey", "in": "header", "name": "Authorization"}
+    },
 }
 
 

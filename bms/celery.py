@@ -2,7 +2,7 @@ from celery import Celery
 from celery.signals import setup_logging
 
 
-app = Celery("project_name")
+app = Celery("bms")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
 
