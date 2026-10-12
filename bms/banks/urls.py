@@ -1,6 +1,6 @@
 from django.urls import path
 
-from bms.banks.views import BankRetrieveUpdateDestroyAPIView, BankListCreateAPIView
+from bms.banks.views import BankListCreateAPIView, BankRetrieveUpdateDestroyAPIView
 
 
 urlpatterns = [
