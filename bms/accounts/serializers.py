@@ -55,3 +55,19 @@ class AccountCreateUpdateSerializer(ModelSerializer):
         if branch and not branch.is_active:
             raise ValidationError({"bank_branch": "Cannot open an account at an inactive branch."})
         return attrs
+
+
+class AccountBalanceSerializer(ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ["balance"]
+
+    def validate_balance(self, value):
+        if value < Decimal("0.00"):
+            raise ValidationError("Balance cannot be negative.")
+        return value
+
+    def validate(self, attrs):
+        if "balance" not in attrs:
+            raise ValidationError({"balance": "This field is required."})
+        return attrs
