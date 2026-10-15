@@ -40,6 +40,7 @@ THIRD_PARTY_APPS = [
     "django_extensions",
     "rest_framework",
     "rest_framework.authtoken",
+    "django_filters",
     "rangefilter",
     "django_rest_passwordreset",
 ]
@@ -193,7 +194,7 @@ REST_FRAMEWORK = {
         "django_filters.rest_framework.DjangoFilterBackend",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 12,
+    "PAGE_SIZE": 10,
 }
 FRONTEND_URL = get_env_variable("FRONTEND_URL")
 
