@@ -1,4 +1,5 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, logout
+from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -9,6 +10,7 @@ from bms.users.serializers import LoginSerializer
 
 
 class UserLoginAPIView(APIView):
+    authentication_classes = []
     permission_classes = [AllowAny]
     serializer_class = LoginSerializer
 
@@ -20,13 +22,14 @@ class UserLoginAPIView(APIView):
         if not user:
             raise ValidationError("Invalid username or password.")
 
-        login(request, user)
-        return Response(status=HTTP_204_NO_CONTENT)
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({"token": token.key})
 
 
 class UserLogoutAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        Token.objects.filter(user=request.user).delete()
         logout(request)
         return Response(status=HTTP_204_NO_CONTENT)

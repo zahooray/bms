@@ -12,7 +12,6 @@ from bms.core.env_utils import get_env_variable
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -20,7 +19,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 
 ALLOWED_HOSTS = get_env_variable("DJANGO_ALLOWED_HOSTS").split(",")
-
 
 # Application definition
 
@@ -41,6 +39,8 @@ THIRD_PARTY_APPS = [
     "constance",
     "django_extensions",
     "rest_framework",
+    "rest_framework.authtoken",
+    "django_filters",
     "rangefilter",
     "django_rest_passwordreset",
 ]
@@ -49,7 +49,6 @@ CUSTOM_APPS = ["bms.core", "bms.users", "bms.accounts", "bms.banks"]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 AUTH_USER_MODEL = "users.User"
-
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -63,7 +62,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "config.urls"
-
 
 TEMPLATES = [
     {
@@ -83,7 +81,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -97,7 +94,6 @@ DATABASES = {
         "PORT": get_env_variable("DB_PORT"),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -117,7 +113,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -130,7 +125,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -191,9 +185,6 @@ SITE_ID = 1
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
-        # Phase 3: lets you browse the DRF API in a browser while logged
-        # into /admin/. Tokens do not exist until Phase 5, so without this
-        # every DRF endpoint would return 401.
         "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
@@ -203,7 +194,7 @@ REST_FRAMEWORK = {
         "django_filters.rest_framework.DjangoFilterBackend",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 12,
+    "PAGE_SIZE": 10,
 }
 FRONTEND_URL = get_env_variable("FRONTEND_URL")
 
@@ -254,6 +245,5 @@ SWAGGER_SETTINGS = {
         "api_key": {"type": "apiKey", "in": "header", "name": "Authorization"}
     },
 }
-
 
 API_BASE_URL = get_env_variable("API_BASE_URL")
