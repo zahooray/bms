@@ -1,6 +1,7 @@
-from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
+from django.core.management.base import BaseCommand
 from django.db import IntegrityError
+
 
 User = get_user_model()
 
@@ -74,10 +75,6 @@ class Command(BaseCommand):
             )
 
         except IntegrityError as e:
-            self.stdout.write(
-                self.style.ERROR(f"❌ Error creating superuser: {str(e)}")
-            )
+            self.stdout.write(self.style.ERROR(f"❌ Error creating superuser: {str(e)}"))
         except Exception as e:
-            self.stdout.write(
-                self.style.ERROR(f"❌ Unexpected error: {str(e)}")
-            )
+            self.stdout.write(self.style.ERROR(f"❌ Unexpected error: {str(e)}"))

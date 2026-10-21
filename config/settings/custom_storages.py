@@ -35,6 +35,7 @@ class CustomS3Boto3Storage(S3Boto3Storage):
             # content_auto close instance
             return super()._save(name, content_autoclose)  # noqa
 
+
 class StaticStorage(S3Boto3Storage):
     location = "staticfiles"
     file_overwrite = False
