@@ -1,6 +1,6 @@
-from django.db.models import CASCADE, CharField, DecimalField, ForeignKey
+from django.db.models import CASCADE, CharField, DateField, DecimalField, ForeignKey
 
-from bms.accounts.constants import AccountType
+from bms.accounts.constants import AccountType, TransactionType
 from bms.core.models import BaseModel
 
 
@@ -31,3 +31,23 @@ class Account(BaseModel):
 
     def __str__(self):
         return f"{self.account_number} ({self.user.username})"
+
+
+class Transaction(BaseModel):
+    type = CharField(max_length=10, choices=TransactionType.choices)
+    date = DateField()
+    amount = DecimalField(max_digits=12, decimal_places=2)
+    account = ForeignKey(
+        Account,
+        on_delete=CASCADE,
+        related_name="transactions",
+    )
+
+    class Meta:
+        verbose_name = "transaction"
+        verbose_name_plural = "transactions"
+        db_table = "transactions"
+        ordering = ["-date", "-id"]
+
+    def __str__(self):
+        return f"{self.get_type_display()} of {self.amount} on {self.date}"
